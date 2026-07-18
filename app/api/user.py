@@ -19,6 +19,7 @@ def get_db():
         db.close()
 
 
+
 @router.post("/users")
 def register_user(user: UserCreate, db: Session = Depends(get_db)):
     return create_user(db, user)
@@ -29,6 +30,9 @@ def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db)
 ):
+    print("Username:", form_data.username)
+    print("Password:", form_data.password)
+
     db_user = authenticate_user(
         db,
         form_data.username,
