@@ -3,10 +3,12 @@ from sqlalchemy.orm import Session
 
 from app.database.database import SessionLocal
 from app.dependencies.auth import verify_token
-from app.schemas.expense import ExpenseCreate
+from app.schemas.expense import ExpenseCreate, ExpenseUpdate
 from app.services.expense_service import (
     create_expense,
-    get_expenses
+    get_expenses,
+    update_expense,
+    delete_expense
 )
 
 router = APIRouter()
@@ -42,3 +44,38 @@ def read_expenses(
         db,
         current_user.id
     )
+
+@router.put("/expenses/{expense_id}")
+def edit_expense(
+    expense_id: int,
+    expense: ExpenseUpdate,
+    db: Session = Depends(get_db),
+    current_user=Depends(verify_token)
+):
+    updated_expense = update_expense(
+        db,
+        expense_id,
+        expense,
+        current_user.id
+    )
+
+    if not updated_expense:
+        return {"message": "Expense not found"}
+
+    return updated_expense
+@router.delete("/expenses/{expense_id}")
+def remove_expense(
+    expense_id: int,
+    db: Session = Depends(get_db),
+    current_user=Depends(verify_token)
+):
+    deleted_expense = delete_expense(
+        db,
+        expense_id,
+        current_user.id
+    )
+
+    if not deleted_expense:
+        return {"message": "Expense not found"}
+
+    return deleted_expense
