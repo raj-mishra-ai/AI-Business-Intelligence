@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 
 from app.models.expense import Expense
 from app.schemas.expense import ExpenseCreate, ExpenseUpdate
@@ -24,6 +25,7 @@ def get_expenses(db: Session, user_id: int):
         Expense.user_id == user_id
     ).all()
 
+
 def update_expense(
     db: Session,
     expense_id: int,
@@ -47,6 +49,7 @@ def update_expense(
 
     return db_expense
 
+
 def delete_expense(
     db: Session,
     expense_id: int,
@@ -64,3 +67,56 @@ def delete_expense(
     db.commit()
 
     return {"message": "Expense deleted successfully"}
+
+
+def get_dashboard_summary(db: Session, user_id: int):
+    expenses = db.query(Expense).filter(
+        Expense.user_id == user_id
+    )
+
+    total_expenses = expenses.count()
+
+    total_amount = (
+        db.query(func.sum(Expense.amount))
+        .filter(Expense.user_id == user_id)
+        .scalar()
+    ) or 0
+
+    highest_expense = (
+        db.query(func.max(Expense.amount))
+        .filter(Expense.user_id == user_id)
+        .scalar()
+    ) or 0
+
+    lowest_expense = (
+        db.query(func.min(Expense.amount))
+        .filter(Expense.user_id == user_id)
+        .scalar()
+    ) or 0
+
+    return {
+        "total_expenses": total_expenses,
+        "total_amount": total_amount,
+        "highest_expense": highest_expense,
+        "lowest_expense": lowest_expense
+    }
+
+
+def get_category_summary(db: Session, user_id: int):
+    result = (
+        db.query(
+            Expense.category,
+            func.sum(Expense.amount).label("total_amount")
+        )
+        .filter(Expense.user_id == user_id)
+        .group_by(Expense.category)
+        .all()
+    )
+
+    return [
+        {
+            "category": row.category,
+            "total_amount": row.total_amount
+        }
+        for row in result
+    ]

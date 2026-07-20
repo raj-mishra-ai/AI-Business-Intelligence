@@ -8,7 +8,9 @@ from app.services.expense_service import (
     create_expense,
     get_expenses,
     update_expense,
-    delete_expense
+    delete_expense,
+    get_dashboard_summary,
+    get_category_summary
 )
 
 router = APIRouter()
@@ -45,6 +47,7 @@ def read_expenses(
         current_user.id
     )
 
+
 @router.put("/expenses/{expense_id}")
 def edit_expense(
     expense_id: int,
@@ -63,6 +66,8 @@ def edit_expense(
         return {"message": "Expense not found"}
 
     return updated_expense
+
+
 @router.delete("/expenses/{expense_id}")
 def remove_expense(
     expense_id: int,
@@ -79,3 +84,25 @@ def remove_expense(
         return {"message": "Expense not found"}
 
     return deleted_expense
+
+
+@router.get("/dashboard/summary")
+def dashboard_summary(
+    db: Session = Depends(get_db),
+    current_user=Depends(verify_token)
+):
+    return get_dashboard_summary(
+        db,
+        current_user.id
+    )
+
+
+@router.get("/dashboard/category-summary")
+def category_summary(
+    db: Session = Depends(get_db),
+    current_user=Depends(verify_token)
+):
+    return get_category_summary(
+        db,
+        current_user.id
+    )
