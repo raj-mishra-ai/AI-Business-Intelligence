@@ -21,9 +21,11 @@ def create_expense(db: Session, expense: ExpenseCreate, user_id: int):
 
 
 def get_expenses(db: Session, user_id: int):
-    return db.query(Expense).filter(
-        Expense.user_id == user_id
-    ).all()
+    return (
+        db.query(Expense)
+        .filter(Expense.user_id == user_id)
+        .all()
+    )
 
 
 def update_expense(
@@ -32,10 +34,14 @@ def update_expense(
     expense: ExpenseUpdate,
     user_id: int
 ):
-    db_expense = db.query(Expense).filter(
-        Expense.id == expense_id,
-        Expense.user_id == user_id
-    ).first()
+    db_expense = (
+        db.query(Expense)
+        .filter(
+            Expense.id == expense_id,
+            Expense.user_id == user_id
+        )
+        .first()
+    )
 
     if not db_expense:
         return None
@@ -55,10 +61,14 @@ def delete_expense(
     expense_id: int,
     user_id: int
 ):
-    db_expense = db.query(Expense).filter(
-        Expense.id == expense_id,
-        Expense.user_id == user_id
-    ).first()
+    db_expense = (
+        db.query(Expense)
+        .filter(
+            Expense.id == expense_id,
+            Expense.user_id == user_id
+        )
+        .first()
+    )
 
     if not db_expense:
         return None
@@ -70,11 +80,11 @@ def delete_expense(
 
 
 def get_dashboard_summary(db: Session, user_id: int):
-    expenses = db.query(Expense).filter(
-        Expense.user_id == user_id
+    total_expenses = (
+        db.query(Expense)
+        .filter(Expense.user_id == user_id)
+        .count()
     )
-
-    total_expenses = expenses.count()
 
     total_amount = (
         db.query(func.sum(Expense.amount))
@@ -120,3 +130,23 @@ def get_category_summary(db: Session, user_id: int):
         }
         for row in result
     ]
+
+
+def get_top_expenses(db: Session, user_id: int):
+    return (
+        db.query(Expense)
+        .filter(Expense.user_id == user_id)
+        .order_by(Expense.amount.desc())
+        .limit(5)
+        .all()
+    )
+
+
+def get_recent_expenses(db: Session, user_id: int):
+    return (
+        db.query(Expense)
+        .filter(Expense.user_id == user_id)
+        .order_by(Expense.id.desc())
+        .limit(5)
+        .all()
+    )

@@ -10,7 +10,9 @@ from app.services.expense_service import (
     update_expense,
     delete_expense,
     get_dashboard_summary,
-    get_category_summary
+    get_category_summary,
+    get_top_expenses,
+    get_recent_expenses
 )
 
 router = APIRouter()
@@ -30,11 +32,7 @@ def add_expense(
     db: Session = Depends(get_db),
     current_user=Depends(verify_token)
 ):
-    return create_expense(
-        db,
-        expense,
-        current_user.id
-    )
+    return create_expense(db, expense, current_user.id)
 
 
 @router.get("/expenses")
@@ -42,10 +40,7 @@ def read_expenses(
     db: Session = Depends(get_db),
     current_user=Depends(verify_token)
 ):
-    return get_expenses(
-        db,
-        current_user.id
-    )
+    return get_expenses(db, current_user.id)
 
 
 @router.put("/expenses/{expense_id}")
@@ -91,10 +86,7 @@ def dashboard_summary(
     db: Session = Depends(get_db),
     current_user=Depends(verify_token)
 ):
-    return get_dashboard_summary(
-        db,
-        current_user.id
-    )
+    return get_dashboard_summary(db, current_user.id)
 
 
 @router.get("/dashboard/category-summary")
@@ -102,7 +94,20 @@ def category_summary(
     db: Session = Depends(get_db),
     current_user=Depends(verify_token)
 ):
-    return get_category_summary(
-        db,
-        current_user.id
-    )
+    return get_category_summary(db, current_user.id)
+
+
+@router.get("/dashboard/top-expenses")
+def top_expenses(
+    db: Session = Depends(get_db),
+    current_user=Depends(verify_token)
+):
+    return get_top_expenses(db, current_user.id)
+
+
+@router.get("/dashboard/recent-expenses")
+def recent_expenses(
+    db: Session = Depends(get_db),
+    current_user=Depends(verify_token)
+):
+    return get_recent_expenses(db, current_user.id)
