@@ -2,9 +2,11 @@ from fastapi import FastAPI, Request
 
 from app.core.config import settings
 from app.database.database import Base, engine
+
 from app.models.company import Company
 from app.models.user import User
 from app.models.expense import Expense
+
 from app.api.company import router as company_router
 from app.api.user import router as user_router
 from app.api.expense import router as expense_router

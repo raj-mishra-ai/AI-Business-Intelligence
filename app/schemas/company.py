@@ -7,8 +7,17 @@ class CompanyCreate(BaseModel):
     country: str
 
 
-class CompanyResponse(CompanyCreate):
+class CompanyUpdate(BaseModel):
+    company_name: str
+    industry: str
+    country: str
+
+
+class CompanyResponse(BaseModel):
     id: int
+    company_name: str
+    industry: str
+    country: str
 
     class Config:
         from_attributes = True
