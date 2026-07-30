@@ -9,6 +9,10 @@ from app.services.company_service import (
     get_company_by_id,
     update_company,
     delete_company,
+    get_company_summary,
+    search_company,
+    filter_by_industry,
+    filter_by_country,
 )
 
 router = APIRouter()
@@ -35,6 +39,36 @@ def read_companies(
     db: Session = Depends(get_db)
 ):
     return get_companies(db)
+
+
+@router.get("/companies/search")
+def search_company_by_name(
+    company_name: str,
+    db: Session = Depends(get_db)
+):
+    return search_company(db, company_name)
+
+
+@router.get("/companies/summary")
+def company_summary(
+    db: Session = Depends(get_db)
+):
+    return get_company_summary(db)
+
+
+@router.get("/companies/filter/industry")
+def get_companies_by_industry(
+    industry: str,
+    db: Session = Depends(get_db)
+):
+    return filter_by_industry(db, industry)
+
+@router.get("/companies/filter/country")
+def get_companies_by_country(
+    country: str,
+    db: Session = Depends(get_db)
+):
+    return filter_by_country(db, country)
 
 
 @router.get("/companies/{company_id}")
