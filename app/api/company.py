@@ -13,6 +13,9 @@ from app.services.company_service import (
     search_company,
     filter_by_industry,
     filter_by_country,
+    sort_companies,
+    get_companies_paginated,
+    get_company_statistics,
 )
 
 router = APIRouter()
@@ -63,12 +66,35 @@ def get_companies_by_industry(
 ):
     return filter_by_industry(db, industry)
 
+
 @router.get("/companies/filter/country")
 def get_companies_by_country(
     country: str,
     db: Session = Depends(get_db)
 ):
     return filter_by_country(db, country)
+
+
+@router.get("/companies/sort")
+def sort_company_list(
+    order: str = "asc",
+    db: Session = Depends(get_db)
+):
+    return sort_companies(db, order)
+
+@router.get("/companies/paginated")
+def read_companies_paginated(
+    limit: int = 10,
+    offset: int = 0,
+    db: Session = Depends(get_db)
+):
+    return get_companies_paginated(db, limit, offset) 
+
+@router.get("/companies/statistics")
+def company_statistics(
+    db: Session = Depends(get_db)
+):
+    return get_company_statistics(db)       
 
 
 @router.get("/companies/{company_id}")

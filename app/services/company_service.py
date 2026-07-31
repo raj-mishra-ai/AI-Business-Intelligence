@@ -34,38 +34,84 @@ def update_company(
     company_id: int,
     company: CompanyUpdate
 ):
-    db_company = db.query(Company).filter(
-        Company.id == company_id
-    ).first()
+    existing_company = get_company_by_id(db, company_id)
 
-    if not db_company:
+    if not existing_company:
         return None
 
-    db_company.company_name = company.company_name
-    db_company.industry = company.industry
-    db_company.country = company.country
+    existing_company.company_name = company.company_name
+    existing_company.industry = company.industry
+    existing_company.country = company.country
 
     db.commit()
-    db.refresh(db_company)
+    db.refresh(existing_company)
 
-    return db_company
+    return existing_company
 
 
 def delete_company(db: Session, company_id: int):
-    db_company = db.query(Company).filter(
-        Company.id == company_id
-    ).first()
+    company = get_company_by_id(db, company_id)
 
-    if not db_company:
+    if not company:
         return None
 
-    db.delete(db_company)
+    db.delete(company)
     db.commit()
 
-    return {"message": "Company deleted successfully"}
+    return company
 
 
 def get_company_summary(db: Session):
+    total_companies = db.query(Company).count()
+
+    return {
+        "total_companies": total_companies
+    }
+
+
+def search_company(db: Session, company_name: str):
+    return db.query(Company).filter(
+        Company.company_name.ilike(f"%{company_name}%")
+    ).all()
+
+
+def filter_by_industry(db: Session, industry: str):
+    return db.query(Company).filter(
+        Company.industry == industry
+    ).all()
+
+
+def filter_by_country(db: Session, country: str):
+    return db.query(Company).filter(
+        Company.country == country
+    ).all()
+
+
+def sort_companies(db: Session, order: str = "asc"):
+    if order.lower() == "desc":
+        return db.query(Company).order_by(
+            Company.company_name.desc()
+        ).all()
+
+    return db.query(Company).order_by(
+        Company.company_name.asc()
+    ).all()
+
+
+def get_companies_paginated(
+    db: Session,
+    limit: int = 10,
+    offset: int = 0
+):
+    return (
+        db.query(Company)
+        .offset(offset)
+        .limit(limit)
+        .all()
+    )
+
+
+def get_company_statistics(db: Session):
     total_companies = db.query(Company).count()
 
     total_industries = db.query(
@@ -76,22 +122,18 @@ def get_company_summary(db: Session):
         func.count(func.distinct(Company.country))
     ).scalar()
 
+    average_companies_per_country = (
+        total_companies / total_countries
+        if total_countries
+        else 0
+    )
+
     return {
         "total_companies": total_companies,
         "total_industries": total_industries,
-        "total_countries": total_countries
+        "total_countries": total_countries,
+        "average_companies_per_country": round(
+            average_companies_per_country,
+            2
+        )
     }
-   
-def search_company(db: Session, company_name: str):
-    return db.query(Company).filter(
-        Company.company_name.ilike(f"%{company_name}%")
-    ).all() 
-
-def filter_by_industry(db: Session, industry: str):
-    return db.query(Company).filter(
-        Company.industry.ilike(f"%{industry}%")
-    ).all()   
-def filter_by_country(db: Session, country: str):
-    return db.query(Company).filter(
-        Company.country.ilike(f"%{country}%")
-    ).all()       
