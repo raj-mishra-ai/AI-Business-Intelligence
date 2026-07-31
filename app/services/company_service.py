@@ -137,3 +137,46 @@ def get_company_statistics(db: Session):
             2
         )
     }
+
+def get_industry_analytics(db: Session):
+    result = (
+        db.query(
+            Company.industry,
+            func.count(Company.id).label("company_count")
+        )
+        .group_by(Company.industry)
+        .all()
+    )
+
+    return [
+        {
+            "industry": row.industry,
+            "company_count": row.company_count
+        }
+        for row in result
+    ]  
+
+def get_country_analytics(db: Session):
+    result = (
+        db.query(
+            Company.country,
+            func.count(Company.id).label("company_count")
+        )
+        .group_by(Company.country)
+        .all()
+    )
+
+    return [
+        {
+            "country": row.country,
+            "company_count": row.company_count
+        }
+        for row in result
+    ]    
+
+def get_dashboard_analytics(db: Session):
+    return {
+        "statistics": get_company_statistics(db),
+        "industry_analytics": get_industry_analytics(db),
+        "country_analytics": get_country_analytics(db)
+    }      
