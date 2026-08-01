@@ -19,6 +19,9 @@ from app.services.company_service import (
     get_industry_analytics,
     get_country_analytics,
     get_dashboard_analytics,
+    get_top_industries,
+    get_top_countries,
+    get_business_report,
 )
 
 router = APIRouter()
@@ -115,7 +118,13 @@ def country_analytics(
 def dashboard_analytics(
     db: Session = Depends(get_db)
 ):
-    return get_dashboard_analytics(db)                
+    return get_dashboard_analytics(db)  
+
+@router.get("/companies/reports/top-industries")
+def top_industries_report(
+    db: Session = Depends(get_db)
+):
+    return get_top_industries(db)                  
 
 
 @router.get("/companies/{company_id}")
@@ -130,6 +139,18 @@ def read_company(
 
     return company
 
+@router.get("/companies/reports/top-countries")
+def top_countries_report(
+    db: Session = Depends(get_db)
+):
+    return get_top_countries(db)
+
+
+@router.get("/companies/reports/business")
+def business_report(
+    db: Session = Depends(get_db)
+):
+    return get_business_report(db)    
 
 @router.put("/companies/{company_id}")
 def edit_company(

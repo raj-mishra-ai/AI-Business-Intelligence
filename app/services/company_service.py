@@ -179,4 +179,51 @@ def get_dashboard_analytics(db: Session):
         "statistics": get_company_statistics(db),
         "industry_analytics": get_industry_analytics(db),
         "country_analytics": get_country_analytics(db)
-    }      
+    }   
+
+def get_top_industries(db: Session):
+    result = (
+        db.query(
+            Company.industry,
+            func.count(Company.id).label("company_count")
+        )
+        .group_by(Company.industry)
+        .order_by(func.count(Company.id).desc())
+        .all()
+    )
+
+    return [
+        {
+            "industry": row.industry,
+            "company_count": row.company_count
+        }
+        for row in result
+    ]  
+
+def get_top_countries(db: Session):
+    result = (
+        db.query(
+            Company.country,
+            func.count(Company.id).label("company_count")
+        )
+        .group_by(Company.country)
+        .order_by(func.count(Company.id).desc())
+        .all()
+    )
+
+    return [
+        {
+            "country": row.country,
+            "company_count": row.company_count
+        }
+        for row in result
+    ]  
+
+def get_business_report(db: Session):
+    return {
+        "statistics": get_company_statistics(db),
+        "top_industries": get_top_industries(db),
+        "top_countries": get_top_countries(db),
+        "industry_analytics": get_industry_analytics(db),
+        "country_analytics": get_country_analytics(db)
+    }           
