@@ -88,13 +88,15 @@ def sort_company_list(
 ):
     return sort_companies(db, order)
 
+
 @router.get("/companies/paginated")
 def read_companies_paginated(
     limit: int = 10,
     offset: int = 0,
     db: Session = Depends(get_db)
 ):
-    return get_companies_paginated(db, limit, offset) 
+    return get_companies_paginated(db, limit, offset)
+
 
 @router.get("/companies/statistics")
 def company_statistics(
@@ -102,42 +104,34 @@ def company_statistics(
 ):
     return get_company_statistics(db)
 
+
 @router.get("/companies/analytics/industry")
 def industry_analytics(
     db: Session = Depends(get_db)
 ):
-    return get_industry_analytics(db)  
+    return get_industry_analytics(db)
+
 
 @router.get("/companies/analytics/country")
 def country_analytics(
     db: Session = Depends(get_db)
 ):
-    return get_country_analytics(db) 
+    return get_country_analytics(db)
+
 
 @router.get("/companies/dashboard")
 def dashboard_analytics(
     db: Session = Depends(get_db)
 ):
-    return get_dashboard_analytics(db)  
+    return get_dashboard_analytics(db)
+
 
 @router.get("/companies/reports/top-industries")
 def top_industries_report(
     db: Session = Depends(get_db)
 ):
-    return get_top_industries(db)                  
+    return get_top_industries(db)
 
-
-@router.get("/companies/{company_id}")
-def read_company(
-    company_id: int,
-    db: Session = Depends(get_db)
-):
-    company = get_company_by_id(db, company_id)
-
-    if not company:
-        return {"message": "Company not found"}
-
-    return company
 
 @router.get("/companies/reports/top-countries")
 def top_countries_report(
@@ -150,7 +144,17 @@ def top_countries_report(
 def business_report(
     db: Session = Depends(get_db)
 ):
-    return get_business_report(db)    
+    return get_business_report(db)
+
+
+# ⚠️ Is endpoint ko hamesha sabse last GET endpoint rakho
+@router.get("/companies/{company_id}")
+def read_company(
+    company_id: int,
+    db: Session = Depends(get_db)
+):
+    return get_company_by_id(db, company_id)
+
 
 @router.put("/companies/{company_id}")
 def edit_company(
@@ -158,16 +162,11 @@ def edit_company(
     company: CompanyUpdate,
     db: Session = Depends(get_db)
 ):
-    updated_company = update_company(
+    return update_company(
         db,
         company_id,
         company
     )
-
-    if not updated_company:
-        return {"message": "Company not found"}
-
-    return updated_company
 
 
 @router.delete("/companies/{company_id}")
@@ -175,9 +174,4 @@ def remove_company(
     company_id: int,
     db: Session = Depends(get_db)
 ):
-    deleted_company = delete_company(db, company_id)
-
-    if not deleted_company:
-        return {"message": "Company not found"}
-
-    return deleted_company
+    return delete_company(db, company_id)
