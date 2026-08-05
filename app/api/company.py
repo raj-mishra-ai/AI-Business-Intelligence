@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from app.database.database import SessionLocal
@@ -22,6 +23,8 @@ from app.services.company_service import (
     get_top_industries,
     get_top_countries,
     get_business_report,
+    export_companies_to_csv,
+    export_companies_to_excel,
 )
 
 router = APIRouter()
@@ -147,7 +150,30 @@ def business_report(
     return get_business_report(db)
 
 
-# ⚠️ Is endpoint ko hamesha sabse last GET endpoint rakho
+@router.get("/companies/export/csv")
+def export_companies_csv(
+    db: Session = Depends(get_db)
+):
+    file_path = export_companies_to_csv(db)
+    return FileResponse(
+        path=file_path,
+        filename="companies.csv",
+        media_type="text/csv"
+    )  
+
+@router.get("/companies/export/excel")
+def export_companies_excel(
+    db: Session = Depends(get_db)
+):
+    file_path = export_companies_to_excel(db)
+
+    return FileResponse(
+        path=file_path,
+        filename="companies.xlsx",
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )      
+
+
 @router.get("/companies/{company_id}")
 def read_company(
     company_id: int,

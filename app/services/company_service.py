@@ -1,7 +1,10 @@
+import pandas as pd
+
 from app.core.exceptions import (
     CompanyNotFoundException,
     CompanyAlreadyExistsException,
 )
+
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
@@ -241,3 +244,46 @@ def get_business_report(db: Session):
         "industry_analytics": get_industry_analytics(db),
         "country_analytics": get_country_analytics(db)
     }           
+
+import pandas as pd
+
+
+def export_companies_to_csv(db: Session):
+    companies = db.query(Company).all()
+
+    data = []
+
+    for company in companies:
+        data.append({
+            "ID": company.id,
+            "Company Name": company.company_name,
+            "Industry": company.industry,
+            "Country": company.country
+        })
+
+    df = pd.DataFrame(data)
+
+    file_path = "companies.csv"
+    df.to_csv(file_path, index=False)
+
+    return file_path   
+
+def export_companies_to_excel(db: Session):
+    companies = db.query(Company).all()
+
+    data = []
+
+    for company in companies:
+        data.append({
+            "ID": company.id,
+            "Company Name": company.company_name,
+            "Industry": company.industry,
+            "Country": company.country
+        })
+
+    df = pd.DataFrame(data)
+
+    file_path = "companies.xlsx"
+    df.to_excel(file_path, index=False)
+
+    return file_path     
