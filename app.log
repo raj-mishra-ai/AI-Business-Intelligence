@@ -1,0 +1,10 @@
+2026-08-08 23:01:47,783 - INFO - Application Started Successfully
+2026-08-08 23:02:38,860 - INFO - Application Started Successfully
+2026-08-08 23:09:57,986 - INFO - Application Started Successfully
+2026-08-08 23:10:17,228 - INFO - Application Started Successfully
+2026-08-08 23:11:00,438 - INFO - Request: GET http://127.0.0.1:8000/docs
+2026-08-08 23:11:00,444 - INFO - Response Status: 200
+2026-08-08 23:11:00,863 - INFO - Request: GET http://127.0.0.1:8000/openapi.json
+2026-08-08 23:11:00,973 - INFO - Response Status: 200
+2026-08-08 23:11:28,057 - INFO - Request: GET http://127.0.0.1:8000/companies
+2026-08-08 23:11:28,082 - INFO - Response Status: 200

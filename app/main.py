@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request
-
+from app.utils.logger import logger
 from app.core.config import settings
 from app.database.database import Base, engine
 
@@ -16,6 +16,8 @@ app = FastAPI(
     version=settings.PROJECT_VERSION
 )
 
+logger.info("Application Started Successfully")
+
 Base.metadata.create_all(bind=engine)
 
 app.include_router(company_router)
@@ -24,14 +26,22 @@ app.include_router(expense_router)
 
 
 @app.middleware("http")
-async def debug_errors(request: Request, call_next):
+async def log_requests(request: Request, call_next):
+    logger.info(
+        f"Request: {request.method} {request.url}"
+    )
+
     try:
         response = await call_next(request)
+
+        logger.info(
+            f"Response Status: {response.status_code}"
+        )
+
         return response
-    except Exception:
-        import traceback
-        traceback.print_exc()
+
+    except Exception as e:
+        logger.error(
+            f"Error: {str(e)}"
+        )
         raise
-
-
-print("Database Connected Successfully!")
