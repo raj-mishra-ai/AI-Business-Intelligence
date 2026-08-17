@@ -8,16 +8,18 @@ function Companies() {
   const [industry, setIndustry] = useState("");
   const [country, setCountry] = useState("");
 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [industryFilter, setIndustryFilter] = useState("");
+
   const [editingId, setEditingId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
 
   const fetchCompanies = async () => {
     try {
       const res = await api.get("/companies");
-      console.log("Companies Data:", res.data);
       setCompanies(res.data);
     } catch (error) {
-      console.error("Fetch Error:", error);
+      console.error(error);
     }
   };
 
@@ -85,11 +87,94 @@ function Companies() {
     }
   };
 
+  const searchCompanies = async () => {
+    try {
+      if (searchTerm.trim() === "") {
+        fetchCompanies();
+        return;
+      }
+
+      const res = await api.get(
+        `/companies/search?company_name=${searchTerm}`
+      );
+
+      setCompanies(res.data);
+    } catch (error) {
+      console.error(error);
+      alert("Search Failed");
+    }
+  };
+
+  const filterByIndustry = async () => {
+    try {
+      if (industryFilter.trim() === "") {
+        fetchCompanies();
+        return;
+      }
+
+      const res = await api.get(
+        `/companies/filter/industry?industry=${industryFilter}`
+      );
+
+      setCompanies(res.data);
+    } catch (error) {
+      console.error(error);
+      alert("Filter Failed");
+    }
+  };
+
   return (
     <div style={{ padding: "20px" }}>
       <h1>Company Management</h1>
 
       <p>Total Companies: {companies.length}</p>
+
+      <hr />
+
+      <h3>Search Company</h3>
+
+      <input
+        type="text"
+        placeholder="Search Company"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+
+      <button
+        onClick={searchCompanies}
+        style={{ marginLeft: "10px" }}
+      >
+        Search
+      </button>
+
+      <button
+        onClick={fetchCompanies}
+        style={{ marginLeft: "10px" }}
+      >
+        Show All
+      </button>
+
+      <hr />
+
+      <h3>Filter By Industry</h3>
+
+      <input
+        type="text"
+        placeholder="Industry Name"
+        value={industryFilter}
+        onChange={(e) => setIndustryFilter(e.target.value)}
+      />
+
+      <button
+        onClick={filterByIndustry}
+        style={{ marginLeft: "10px" }}
+      >
+        Filter
+      </button>
+
+      <hr />
+
+      <h3>{isEditing ? "Edit Company" : "Add Company"}</h3>
 
       <input
         type="text"
@@ -98,8 +183,7 @@ function Companies() {
         onChange={(e) => setCompanyName(e.target.value)}
       />
 
-      <br />
-      <br />
+      <br /><br />
 
       <input
         type="text"
@@ -108,8 +192,7 @@ function Companies() {
         onChange={(e) => setIndustry(e.target.value)}
       />
 
-      <br />
-      <br />
+      <br /><br />
 
       <input
         type="text"
@@ -118,8 +201,7 @@ function Companies() {
         onChange={(e) => setCountry(e.target.value)}
       />
 
-      <br />
-      <br />
+      <br /><br />
 
       {isEditing ? (
         <button onClick={updateCompany}>
@@ -139,8 +221,7 @@ function Companies() {
         companies.map((company) => (
           <div key={company.id}>
             <p>
-              <b>{company.company_name}</b> | {company.industry} |{" "}
-              {company.country}
+              <b>{company.company_name}</b> | {company.industry} | {company.country}
 
               <button
                 onClick={() => editCompany(company)}
