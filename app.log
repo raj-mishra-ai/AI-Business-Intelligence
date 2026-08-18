@@ -174,3 +174,82 @@
 2026-08-15 22:45:16,062 - INFO - Response Status: 200
 2026-08-15 22:45:16,070 - INFO - Request: GET http://127.0.0.1:8000/companies
 2026-08-15 22:45:16,077 - INFO - Response Status: 200
+2026-08-18 00:40:59,558 - INFO - Application Started Successfully
+2026-08-18 00:42:22,632 - INFO - Request: GET http://127.0.0.1:8000/docs
+2026-08-18 00:42:22,634 - INFO - Response Status: 200
+2026-08-18 00:42:22,829 - INFO - Request: GET http://127.0.0.1:8000/openapi.json
+2026-08-18 00:42:22,976 - INFO - Response Status: 200
+2026-08-18 00:43:26,309 - INFO - Request: GET http://127.0.0.1:8000/companies/search?company_name=TCS
+2026-08-18 00:43:26,351 - INFO - Response Status: 200
+2026-08-18 00:46:38,459 - INFO - Request: GET http://127.0.0.1:8000/companies/search?company_name=TCS
+2026-08-18 00:46:38,468 - INFO - Response Status: 200
+2026-08-18 00:46:38,520 - INFO - Request: GET http://127.0.0.1:8000/favicon.ico
+2026-08-18 00:46:38,521 - INFO - Response Status: 404
+2026-08-18 00:47:06,705 - INFO - Request: GET http://127.0.0.1:8000/companies/search?company_name=TCS
+2026-08-18 00:47:06,711 - INFO - Response Status: 200
+2026-08-18 00:49:43,744 - INFO - Request: GET http://127.0.0.1:8000/companies
+2026-08-18 00:49:43,750 - INFO - Response Status: 200
+2026-08-18 00:49:43,756 - INFO - Request: GET http://127.0.0.1:8000/companies
+2026-08-18 00:49:43,766 - INFO - Response Status: 200
+2026-08-18 00:49:50,548 - INFO - Request: GET http://127.0.0.1:8000/companies/search?company_name=tcs
+2026-08-18 00:49:50,554 - INFO - Response Status: 200
+2026-08-18 00:49:54,980 - INFO - Request: GET http://127.0.0.1:8000/companies/search?company_name=tcs
+2026-08-18 00:49:54,985 - INFO - Response Status: 200
+2026-08-18 00:55:44,316 - INFO - Request: GET http://127.0.0.1:8000/companies
+2026-08-18 00:55:44,319 - INFO - Response Status: 200
+2026-08-18 00:55:57,984 - INFO - Request: GET http://127.0.0.1:8000/companies
+2026-08-18 00:55:57,990 - INFO - Response Status: 200
+2026-08-18 00:55:58,011 - INFO - Request: GET http://127.0.0.1:8000/companies
+2026-08-18 00:55:58,032 - INFO - Response Status: 200
+2026-08-18 00:56:13,957 - INFO - Request: GET http://127.0.0.1:8000/companies/filter/industry?industry=it
+2026-08-18 00:56:13,971 - INFO - Response Status: 200
+2026-08-18 00:56:34,638 - INFO - Request: GET http://127.0.0.1:8000/companies/filter/industry?industry=Technology
+2026-08-18 00:56:34,644 - INFO - Response Status: 200
+2026-08-18 01:06:18,612 - INFO - Request: GET http://127.0.0.1:8000/companies/filter/industry?industry=Technology
+2026-08-18 01:06:18,617 - INFO - Response Status: 200
+2026-08-18 14:22:16,978 - INFO - Application Started Successfully
+2026-08-18 14:22:20,359 - INFO - Request: GET http://127.0.0.1:8000/
+2026-08-18 14:22:20,390 - INFO - Response Status: 404
+2026-08-18 14:22:21,091 - INFO - Request: GET http://127.0.0.1:8000/
+2026-08-18 14:22:21,093 - INFO - Response Status: 404
+2026-08-18 14:22:21,144 - INFO - Request: GET http://127.0.0.1:8000/favicon.ico
+2026-08-18 14:22:21,145 - INFO - Response Status: 404
+2026-08-18 14:25:17,634 - INFO - Request: GET http://127.0.0.1:8000/docs
+2026-08-18 14:25:17,636 - INFO - Response Status: 200
+2026-08-18 14:25:17,761 - INFO - Request: GET http://127.0.0.1:8000/openapi.json
+2026-08-18 14:25:17,821 - INFO - Response Status: 200
+2026-08-18 14:26:06,785 - INFO - Request: POST http://127.0.0.1:8000/users
+2026-08-18 14:26:06,791 - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "C:\Users\innoc\OneDrive\Desktop\AI-Business-Intelligence\venv\Lib\site-packages\passlib\handlers\bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2026-08-18 14:26:07,264 - INFO - Response Status: 200
+2026-08-18 14:28:08,167 - INFO - Request: POST http://127.0.0.1:8000/login
+2026-08-18 14:28:08,588 - INFO - Response Status: 200
+2026-08-18 14:30:38,920 - INFO - Request: POST http://127.0.0.1:8000/login
+2026-08-18 14:30:39,342 - INFO - Response Status: 200
+2026-08-18 14:31:00,760 - INFO - Request: GET http://127.0.0.1:8000/me
+2026-08-18 14:31:00,766 - INFO - Response Status: 200
+2026-08-18 15:05:16,705 - INFO - Application Started Successfully
+2026-08-18 15:05:43,889 - INFO - Request: GET http://127.0.0.1:8000/docs
+2026-08-18 15:05:43,891 - INFO - Response Status: 200
+2026-08-18 15:05:43,999 - INFO - Request: GET http://127.0.0.1:8000/openapi.json
+2026-08-18 15:05:44,101 - INFO - Response Status: 200
+2026-08-18 15:06:09,227 - INFO - Request: OPTIONS http://127.0.0.1:8000/users
+2026-08-18 15:06:09,228 - INFO - Response Status: 200
+2026-08-18 15:06:09,232 - INFO - Request: POST http://127.0.0.1:8000/users
+2026-08-18 15:06:09,238 - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "C:\Users\innoc\OneDrive\Desktop\AI-Business-Intelligence\venv\Lib\site-packages\passlib\handlers\bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2026-08-18 15:06:09,736 - INFO - Response Status: 200
+2026-08-18 15:20:45,490 - INFO - Request: POST http://127.0.0.1:8000/login
+2026-08-18 15:20:45,936 - INFO - Response Status: 200
+2026-08-18 15:21:06,023 - INFO - Request: GET http://127.0.0.1:8000/companies
+2026-08-18 15:21:06,033 - INFO - Response Status: 200
+2026-08-18 15:21:06,037 - INFO - Request: GET http://127.0.0.1:8000/companies
+2026-08-18 15:21:06,043 - INFO - Response Status: 200
