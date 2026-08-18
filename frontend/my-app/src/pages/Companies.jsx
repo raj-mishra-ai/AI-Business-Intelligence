@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
+import { useNavigate } from "react-router-dom";
+
 
 function Companies() {
+  const navigate = useNavigate();
   const [companies, setCompanies] = useState([]);
 
   const [companyName, setCompanyName] = useState("");
@@ -24,8 +27,15 @@ function Companies() {
   };
 
   useEffect(() => {
-    fetchCompanies();
-  }, []);
+  const token = localStorage.getItem("access_token");
+
+  if (!token) {
+    navigate("/login");
+    return;
+  }
+
+  fetchCompanies();
+}, []);
 
   const addCompany = async () => {
     try {
@@ -125,6 +135,24 @@ function Companies() {
 
   return (
     <div style={{ padding: "20px" }}>
+
+      <button
+  onClick={() => {
+    localStorage.removeItem("access_token");
+    window.location.href = "/login";
+  }}
+  style={{
+    float: "right",
+    padding: "10px 15px",
+    cursor: "pointer",
+    backgroundColor: "#dc3545",
+    color: "white",
+    border: "none",
+    borderRadius: "5px",
+  }}
+>
+  Logout
+</button>
       <h1>Company Management</h1>
 
       <p>Total Companies: {companies.length}</p>
