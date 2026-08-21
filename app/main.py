@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
+
 from app.utils.logger import logger
 from app.core.config import settings
 from app.database.database import Base, engine
@@ -12,11 +13,22 @@ from app.models.expense import Expense
 from app.api.company import router as company_router
 from app.api.user import router as user_router
 from app.api.expense import router as expense_router
+from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.PROJECT_VERSION
+)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5174",
+        "http://localhost:5173"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # CORS Configuration

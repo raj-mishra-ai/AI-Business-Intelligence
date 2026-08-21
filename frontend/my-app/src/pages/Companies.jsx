@@ -1,21 +1,18 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
-import { useNavigate } from "react-router-dom";
-
 
 function Companies() {
-  const navigate = useNavigate();
   const [companies, setCompanies] = useState([]);
 
   const [companyName, setCompanyName] = useState("");
   const [industry, setIndustry] = useState("");
   const [country, setCountry] = useState("");
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [industryFilter, setIndustryFilter] = useState("");
-
   const [editingId, setEditingId] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    fetchCompanies();
+  }, []);
 
   const fetchCompanies = async () => {
     try {
@@ -25,17 +22,6 @@ function Companies() {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-  const token = localStorage.getItem("access_token");
-
-  if (!token) {
-    navigate("/login");
-    return;
-  }
-
-  fetchCompanies();
-}, []);
 
   const addCompany = async () => {
     try {
@@ -58,8 +44,6 @@ function Companies() {
 
   const editCompany = (company) => {
     setEditingId(company.id);
-    setIsEditing(true);
-
     setCompanyName(company.company_name);
     setIndustry(company.industry);
     setCountry(company.country);
@@ -73,12 +57,10 @@ function Companies() {
         country: country,
       });
 
+      setEditingId(null);
       setCompanyName("");
       setIndustry("");
       setCountry("");
-
-      setEditingId(null);
-      setIsEditing(false);
 
       fetchCompanies();
     } catch (error) {
@@ -97,112 +79,15 @@ function Companies() {
     }
   };
 
-  const searchCompanies = async () => {
-    try {
-      if (searchTerm.trim() === "") {
-        fetchCompanies();
-        return;
-      }
-
-      const res = await api.get(
-        `/companies/search?company_name=${searchTerm}`
-      );
-
-      setCompanies(res.data);
-    } catch (error) {
-      console.error(error);
-      alert("Search Failed");
-    }
-  };
-
-  const filterByIndustry = async () => {
-    try {
-      if (industryFilter.trim() === "") {
-        fetchCompanies();
-        return;
-      }
-
-      const res = await api.get(
-        `/companies/filter/industry?industry=${industryFilter}`
-      );
-
-      setCompanies(res.data);
-    } catch (error) {
-      console.error(error);
-      alert("Filter Failed");
-    }
-  };
-
   return (
     <div style={{ padding: "20px" }}>
+      <h1>Companies Page</h1>
 
-      <button
-  onClick={() => {
-    localStorage.removeItem("access_token");
-    window.location.href = "/login";
-  }}
-  style={{
-    float: "right",
-    padding: "10px 15px",
-    cursor: "pointer",
-    backgroundColor: "#dc3545",
-    color: "white",
-    border: "none",
-    borderRadius: "5px",
-  }}
->
-  Logout
-</button>
-      <h1>Company Management</h1>
-
-      <p>Total Companies: {companies.length}</p>
+      <h3>Total Companies: {companies.length}</h3>
 
       <hr />
 
-      <h3>Search Company</h3>
-
-      <input
-        type="text"
-        placeholder="Search Company"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-
-      <button
-        onClick={searchCompanies}
-        style={{ marginLeft: "10px" }}
-      >
-        Search
-      </button>
-
-      <button
-        onClick={fetchCompanies}
-        style={{ marginLeft: "10px" }}
-      >
-        Show All
-      </button>
-
-      <hr />
-
-      <h3>Filter By Industry</h3>
-
-      <input
-        type="text"
-        placeholder="Industry Name"
-        value={industryFilter}
-        onChange={(e) => setIndustryFilter(e.target.value)}
-      />
-
-      <button
-        onClick={filterByIndustry}
-        style={{ marginLeft: "10px" }}
-      >
-        Filter
-      </button>
-
-      <hr />
-
-      <h3>{isEditing ? "Edit Company" : "Add Company"}</h3>
+      <h3>{editingId ? "Edit Company" : "Add Company"}</h3>
 
       <input
         type="text"
@@ -211,7 +96,8 @@ function Companies() {
         onChange={(e) => setCompanyName(e.target.value)}
       />
 
-      <br /><br />
+      <br />
+      <br />
 
       <input
         type="text"
@@ -220,7 +106,8 @@ function Companies() {
         onChange={(e) => setIndustry(e.target.value)}
       />
 
-      <br /><br />
+      <br />
+      <br />
 
       <input
         type="text"
@@ -229,45 +116,39 @@ function Companies() {
         onChange={(e) => setCountry(e.target.value)}
       />
 
-      <br /><br />
+      <br />
+      <br />
 
-      {isEditing ? (
-        <button onClick={updateCompany}>
-          Update Company
-        </button>
+      {editingId ? (
+        <button onClick={updateCompany}>Update Company</button>
       ) : (
-        <button onClick={addCompany}>
-          Add Company
-        </button>
+        <button onClick={addCompany}>Add Company</button>
       )}
 
       <hr />
 
-      {companies.length === 0 ? (
-        <p>No Companies Found</p>
-      ) : (
-        companies.map((company) => (
-          <div key={company.id}>
-            <p>
-              <b>{company.company_name}</b> | {company.industry} | {company.country}
+      {companies.map((company) => (
+        <div key={company.id}>
+          <p>
+            <b>{company.company_name}</b> | {company.industry} |{" "}
+            {company.country}
 
-              <button
-                onClick={() => editCompany(company)}
-                style={{ marginLeft: "10px" }}
-              >
-                Edit
-              </button>
+            <button
+              onClick={() => editCompany(company)}
+              style={{ marginLeft: "10px" }}
+            >
+              Edit
+            </button>
 
-              <button
-                onClick={() => deleteCompany(company.id)}
-                style={{ marginLeft: "10px" }}
-              >
-                Delete
-              </button>
-            </p>
-          </div>
-        ))
-      )}
+            <button
+              onClick={() => deleteCompany(company.id)}
+              style={{ marginLeft: "10px" }}
+            >
+              Delete
+            </button>
+          </p>
+        </div>
+      ))}
     </div>
   );
 }
