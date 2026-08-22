@@ -2,42 +2,81 @@ import { useEffect, useState } from "react";
 import api from "../services/api";
 
 function Dashboard() {
-  const [stats, setStats] = useState({
-    total_companies: 0,
-    total_industries: 0,
-    total_countries: 0,
-    average_companies_per_country: 0,
-  });
+  const [data, setData] = useState(null);
 
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const res = await api.get("/companies/statistics");
-        console.log("Dashboard Data:", res.data);
-        setStats(res.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchStats();
+    fetchDashboard();
   }, []);
+
+  const fetchDashboard = async () => {
+    try {
+      const res = await api.get("/companies/dashboard");
+      setData(res.data);
+    } catch (error) {
+      console.error(error);
+      alert("Dashboard Load Failed");
+    }
+  };
+
+  if (!data) {
+    return <h2>Loading...</h2>;
+  }
 
   return (
     <div style={{ padding: "20px" }}>
-      <h1>Dashboard</h1>
+      <h1>Business Dashboard</h1>
+      <button
+  onClick={() => {
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  }}
+>
+  Logout
+</button>
 
-      <h3>Total Companies: {stats.total_companies}</h3>
+      <hr />
 
-      <h3>Total Industries: {stats.total_industries}</h3>
+      <h2>Statistics</h2>
 
-      <h3>Total Countries: {stats.total_countries}</h3>
+      <p>
+        <b>Total Companies:</b>{" "}
+        {data.statistics.total_companies}
+      </p>
 
-      <h3>
-        Average Companies Per Country:
-        {" "}
-        {stats.average_companies_per_country}
-      </h3>
+      <p>
+        <b>Total Industries:</b>{" "}
+        {data.statistics.total_industries}
+      </p>
+
+      <p>
+        <b>Total Countries:</b>{" "}
+        {data.statistics.total_countries}
+      </p>
+
+      <p>
+        <b>Average Companies Per Country:</b>{" "}
+        {data.statistics.average_companies_per_country}
+      </p>
+
+      <hr />
+
+      <h2>Industry Analytics</h2>
+
+      {data.industry_analytics.map((item, index) => (
+        <p key={index}>
+          {item.industry} : {item.company_count}
+        </p>
+      ))}
+
+      <hr />
+
+      <h2>Country Analytics</h2>
+
+      {data.country_analytics.map((item, index) => (
+        <p key={index}>
+          {item.country} : {item.company_count}
+        </p>
+      ))}
     </div>
   );
 }

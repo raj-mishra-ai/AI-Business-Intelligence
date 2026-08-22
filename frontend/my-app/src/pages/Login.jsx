@@ -34,7 +34,7 @@ function Login() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: "#f4f6f9",
+        background: "#ffffff",
       }}
     >
       <div
@@ -43,7 +43,7 @@ function Login() {
           padding: "30px",
           background: "white",
           borderRadius: "12px",
-          boxShadow: "0 0 20px rgba(0,0,0,0.1)",
+          boxShadow: "0 0 20px rgba(61, 2, 2, 0.1)",
         }}
       >
         <h1 

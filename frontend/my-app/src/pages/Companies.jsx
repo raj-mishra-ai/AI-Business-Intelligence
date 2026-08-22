@@ -10,6 +10,8 @@ function Companies() {
 
   const [editingId, setEditingId] = useState(null);
 
+  const [searchTerm, setSearchTerm] = useState("");
+
   useEffect(() => {
     fetchCompanies();
   }, []);
@@ -20,6 +22,24 @@ function Companies() {
       setCompanies(res.data);
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const searchCompanies = async () => {
+    try {
+      if (searchTerm.trim() === "") {
+        fetchCompanies();
+        return;
+      }
+
+      const res = await api.get(
+        `/companies/search?company_name=${searchTerm}`
+      );
+
+      setCompanies(res.data);
+    } catch (error) {
+      console.error(error);
+      alert("Search Failed");
     }
   };
 
@@ -79,11 +99,72 @@ function Companies() {
     }
   };
 
+  const exportCSV = () => {
+    window.open(
+      "http://127.0.0.1:8000/companies/export/csv",
+      "_blank"
+    );
+  };
+
+  const exportExcel = () => {
+    window.open(
+      "http://127.0.0.1:8000/companies/export/excel",
+      "_blank"
+    );
+  };
+
   return (
     <div style={{ padding: "20px" }}>
       <h1>Companies Page</h1>
 
+      <button
+  onClick={() => {
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  }}
+>
+  Logout
+</button>
+
       <h3>Total Companies: {companies.length}</h3>
+
+      <hr />
+
+      <h3>Search Company</h3>
+
+      <input
+        type="text"
+        placeholder="Search Company"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+
+      <button
+        onClick={searchCompanies}
+        style={{ marginLeft: "10px" }}
+      >
+        Search
+      </button>
+
+      <button
+        onClick={fetchCompanies}
+        style={{ marginLeft: "10px" }}
+      >
+        Show All
+      </button>
+
+      <hr />
+
+      <button onClick={exportCSV}>
+        Export CSV
+      </button>
+
+      <button
+        onClick={exportExcel}
+        style={{ marginLeft: "10px" }}
+      >
+        Export Excel
+      </button>
 
       <hr />
 
@@ -120,9 +201,13 @@ function Companies() {
       <br />
 
       {editingId ? (
-        <button onClick={updateCompany}>Update Company</button>
+        <button onClick={updateCompany}>
+          Update Company
+        </button>
       ) : (
-        <button onClick={addCompany}>Add Company</button>
+        <button onClick={addCompany}>
+          Add Company
+        </button>
       )}
 
       <hr />
