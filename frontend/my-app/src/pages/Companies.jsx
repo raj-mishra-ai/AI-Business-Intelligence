@@ -117,9 +117,9 @@ function Companies() {
     <div style={{ padding: "20px" }}>
       <h1>Companies Page</h1>
 
-      <button
+     <button
   onClick={() => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("access_token");
     window.location.href = "/login";
   }}
 >

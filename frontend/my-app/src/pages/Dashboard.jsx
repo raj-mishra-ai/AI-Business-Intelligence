@@ -25,58 +25,23 @@ function Dashboard() {
   return (
     <div style={{ padding: "20px" }}>
       <h1>Business Dashboard</h1>
-      <button
-  onClick={() => {
-    localStorage.removeItem("token");
-    window.location.href = "/login";
-  }}
->
-  Logout
-</button>
 
-      <hr />
+      <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
+        <div style={{ border: "1px solid #ccc", padding: "15px" }}>
+          <h3>Total Companies</h3>
+          <h2>{data.statistics.total_companies}</h2>
+        </div>
 
-      <h2>Statistics</h2>
+        <div style={{ border: "1px solid #ccc", padding: "15px" }}>
+          <h3>Total Industries</h3>
+          <h2>{data.statistics.total_industries}</h2>
+        </div>
 
-      <p>
-        <b>Total Companies:</b>{" "}
-        {data.statistics.total_companies}
-      </p>
-
-      <p>
-        <b>Total Industries:</b>{" "}
-        {data.statistics.total_industries}
-      </p>
-
-      <p>
-        <b>Total Countries:</b>{" "}
-        {data.statistics.total_countries}
-      </p>
-
-      <p>
-        <b>Average Companies Per Country:</b>{" "}
-        {data.statistics.average_companies_per_country}
-      </p>
-
-      <hr />
-
-      <h2>Industry Analytics</h2>
-
-      {data.industry_analytics.map((item, index) => (
-        <p key={index}>
-          {item.industry} : {item.company_count}
-        </p>
-      ))}
-
-      <hr />
-
-      <h2>Country Analytics</h2>
-
-      {data.country_analytics.map((item, index) => (
-        <p key={index}>
-          {item.country} : {item.company_count}
-        </p>
-      ))}
+        <div style={{ border: "1px solid #ccc", padding: "15px" }}>
+          <h3>Total Countries</h3>
+          <h2>{data.statistics.total_countries}</h2>
+        </div>
+      </div>
     </div>
   );
 }
