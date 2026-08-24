@@ -32,14 +32,17 @@ function Dashboard() {
   }, []);
 
   const fetchDashboard = async () => {
-    try {
-      const res = await api.get("/companies/dashboard");
-      setData(res.data);
-    } catch (error) {
-      console.error(error);
-      alert("Dashboard Load Failed");
-    }
-  };
+  try {
+    const res = await api.get("/companies/dashboard");
+
+    console.log("Dashboard Data:", res.data);
+
+    setData(res.data);
+  } catch (error) {
+    console.error("Dashboard Error:", error);
+    alert("Dashboard Load Failed");
+  }
+};
 
   if (!data) {
     return <h2>Loading...</h2>;
@@ -107,7 +110,7 @@ function Dashboard() {
       >
         <div
           style={{
-            background: "#36A2EB",
+            background: "#0098fd",
             color: "white",
             padding: "20px",
             borderRadius: "12px",
