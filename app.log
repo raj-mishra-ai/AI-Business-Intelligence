@@ -592,3 +592,6 @@ AttributeError: module 'bcrypt' has no attribute '__about__'
 2026-08-25 13:04:30,197 - INFO - Request: GET http://127.0.0.1:8000/companies/dashboard
 2026-08-25 13:04:30,208 - INFO - Response Status: 200
 2026-08-25 13:04:30,214 - INFO - Request: GET http://127.0.0.1:8000/companies/dashboard
+2026-08-25 13:04:30,226 - INFO - Response Status: 200
+2026-08-25 13:09:05,852 - INFO - Request: GET http://127.0.0.1:8000/companies
+2026-08-25 13:09:05,858 - INFO - Response Status: 200

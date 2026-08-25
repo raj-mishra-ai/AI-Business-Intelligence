@@ -45,10 +45,15 @@ function Companies() {
 
   const addCompany = async () => {
     try {
+      if (!companyName || !industry || !country) {
+        alert("All fields are required");
+        return;
+      }
+
       await api.post("/companies", {
         company_name: companyName,
-        industry: industry,
-        country: country,
+        industry,
+        country,
       });
 
       setCompanyName("");
@@ -73,8 +78,8 @@ function Companies() {
     try {
       await api.put(`/companies/${editingId}`, {
         company_name: companyName,
-        industry: industry,
-        country: country,
+        industry,
+        country,
       });
 
       setEditingId(null);
@@ -115,125 +120,248 @@ function Companies() {
 
   return (
     <div style={{ padding: "20px" }}>
-      <h1>Companies Page</h1>
+      <h1>🏢 Companies Management</h1>
 
-     <button
-  onClick={() => {
-    localStorage.removeItem("access_token");
-    window.location.href = "/login";
-  }}
->
-  Logout
-</button>
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          marginBottom: "20px",
+        }}
+      >
+        <button
+          onClick={() => (window.location.href = "/dashboard")}
+        >
+          Dashboard
+        </button>
+
+        <button
+          onClick={() => (window.location.href = "/companies")}
+        >
+          Companies
+        </button>
+
+        <button
+          onClick={() => {
+            localStorage.removeItem("access_token");
+            window.location.href = "/login";
+          }}
+        >
+          Logout
+        </button>
+      </div>
 
       <h3>Total Companies: {companies.length}</h3>
 
       <hr />
 
-      <h3>Search Company</h3>
+      <h3>🔍 Search Company</h3>
 
       <input
         type="text"
         placeholder="Search Company"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
+        style={{ padding: "8px", width: "250px" }}
       />
 
       <button
         onClick={searchCompanies}
-        style={{ marginLeft: "10px" }}
+        style={{
+          marginLeft: "10px",
+          padding: "8px 15px",
+        }}
       >
         Search
       </button>
 
       <button
         onClick={fetchCompanies}
-        style={{ marginLeft: "10px" }}
+        style={{
+          marginLeft: "10px",
+          padding: "8px 15px",
+        }}
       >
         Show All
       </button>
 
       <hr />
 
-      <button onClick={exportCSV}>
+      <button
+        onClick={exportCSV}
+        style={{
+          backgroundColor: "#36A2EB",
+          color: "white",
+          padding: "10px",
+          border: "none",
+          marginRight: "10px",
+          cursor: "pointer",
+        }}
+      >
         Export CSV
       </button>
 
       <button
         onClick={exportExcel}
-        style={{ marginLeft: "10px" }}
+        style={{
+          backgroundColor: "#4CAF50",
+          color: "white",
+          padding: "10px",
+          border: "none",
+          cursor: "pointer",
+        }}
       >
         Export Excel
       </button>
 
       <hr />
 
-      <h3>{editingId ? "Edit Company" : "Add Company"}</h3>
+      <div
+        style={{
+          border: "1px solid #ddd",
+          padding: "20px",
+          borderRadius: "10px",
+          marginBottom: "20px",
+        }}
+      >
+        <h3>
+          {editingId ? "✏️ Edit Company" : "➕ Add Company"}
+        </h3>
 
-      <input
-        type="text"
-        placeholder="Company Name"
-        value={companyName}
-        onChange={(e) => setCompanyName(e.target.value)}
-      />
+        <input
+          type="text"
+          placeholder="Company Name"
+          value={companyName}
+          onChange={(e) => setCompanyName(e.target.value)}
+          style={{
+            width: "300px",
+            padding: "10px",
+          }}
+        />
 
-      <br />
-      <br />
+        <br />
+        <br />
 
-      <input
-        type="text"
-        placeholder="Industry"
-        value={industry}
-        onChange={(e) => setIndustry(e.target.value)}
-      />
+        <input
+          type="text"
+          placeholder="Industry"
+          value={industry}
+          onChange={(e) => setIndustry(e.target.value)}
+          style={{
+            width: "300px",
+            padding: "10px",
+          }}
+        />
 
-      <br />
-      <br />
+        <br />
+        <br />
 
-      <input
-        type="text"
-        placeholder="Country"
-        value={country}
-        onChange={(e) => setCountry(e.target.value)}
-      />
+        <input
+          type="text"
+          placeholder="Country"
+          value={country}
+          onChange={(e) => setCountry(e.target.value)}
+          style={{
+            width: "300px",
+            padding: "10px",
+          }}
+        />
 
-      <br />
-      <br />
+        <br />
+        <br />
 
-      {editingId ? (
-        <button onClick={updateCompany}>
-          Update Company
-        </button>
-      ) : (
-        <button onClick={addCompany}>
-          Add Company
-        </button>
-      )}
+        {editingId ? (
+          <button
+            onClick={updateCompany}
+            style={{
+              backgroundColor: "#FF9800",
+              color: "white",
+              padding: "10px 20px",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            Update Company
+          </button>
+        ) : (
+          <button
+            onClick={addCompany}
+            style={{
+              backgroundColor: "#4CAF50",
+              color: "white",
+              padding: "10px 20px",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            Add Company
+          </button>
+        )}
+      </div>
 
-      <hr />
+      <table
+        border="1"
+        cellPadding="10"
+        style={{
+          width: "100%",
+          borderCollapse: "collapse",
+        }}
+      >
+        <thead>
+          <tr
+            style={{
+              backgroundColor: "#36A2EB",
+              color: "white",
+            }}
+          >
+            <th>ID</th>
+            <th>Company</th>
+            <th>Industry</th>
+            <th>Country</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
 
-      {companies.map((company) => (
-        <div key={company.id}>
-          <p>
-            <b>{company.company_name}</b> | {company.industry} |{" "}
-            {company.country}
+        <tbody>
+          {companies.map((company) => (
+            <tr key={company.id}>
+              <td>{company.id}</td>
+              <td>{company.company_name}</td>
+              <td>{company.industry}</td>
+              <td>{company.country}</td>
 
-            <button
-              onClick={() => editCompany(company)}
-              style={{ marginLeft: "10px" }}
-            >
-              Edit
-            </button>
+              <td>
+                <button
+                  onClick={() => editCompany(company)}
+                  style={{
+                    backgroundColor: "#4CAF50",
+                    color: "white",
+                    border: "none",
+                    padding: "5px 10px",
+                    marginRight: "10px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Edit
+                </button>
 
-            <button
-              onClick={() => deleteCompany(company.id)}
-              style={{ marginLeft: "10px" }}
-            >
-              Delete
-            </button>
-          </p>
-        </div>
-      ))}
+                <button
+                  onClick={() => deleteCompany(company.id)}
+                  style={{
+                    backgroundColor: "#f44336",
+                    color: "white",
+                    border: "none",
+                    padding: "5px 10px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

@@ -148,6 +148,22 @@ function Dashboard() {
         </div>
 
         <div
+  style={{
+    background: "#FF9800",
+    color: "white",
+    padding: "20px",
+    borderRadius: "12px",
+    minWidth: "220px",
+    textAlign: "center",
+  }}
+>
+  <h3>Avg Companies/Country</h3>
+  <h1>
+    {data.statistics.average_companies_per_country}
+  </h1>
+</div>
+
+        <div
           style={{
             background: "#4BC0C0",
             color: "white",
