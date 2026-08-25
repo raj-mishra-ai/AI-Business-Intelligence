@@ -101,6 +101,31 @@ function Dashboard() {
       </h1>
 
       <div
+  style={{
+    display: "flex",
+    gap: "15px",
+    marginBottom: "20px",
+  }}
+>
+  <button onClick={() => window.location.href = "/dashboard"}>
+    Dashboard
+  </button>
+
+  <button onClick={() => window.location.href = "/companies"}>
+    Companies
+  </button>
+
+  <button
+    onClick={() => {
+      localStorage.removeItem("access_token");
+      window.location.href = "/login";
+    }}
+  >
+    Logout
+  </button>
+</div>
+
+      <div
         style={{
           display: "flex",
           gap: "20px",
