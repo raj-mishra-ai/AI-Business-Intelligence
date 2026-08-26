@@ -5,12 +5,16 @@ function Companies() {
   const [companies, setCompanies] = useState([]);
 
   const [companyName, setCompanyName] = useState("");
+  const [industryFilter, setIndustryFilter] = useState("");
+const [countryFilter, setCountryFilter] = useState("");
   const [industry, setIndustry] = useState("");
   const [country, setCountry] = useState("");
 
   const [editingId, setEditingId] = useState(null);
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [page, setPage] = useState(1);
+const limit = 5;
 
   useEffect(() => {
     fetchCompanies();
@@ -24,6 +28,22 @@ function Companies() {
       console.error(error);
     }
   };
+
+  const fetchPaginatedCompanies = async (pageNumber) => {
+  try {
+    const offset = (pageNumber - 1) * limit;
+
+    const res = await api.get(
+      `/companies/paginated?limit=${limit}&offset=${offset}`
+    );
+
+    setCompanies(res.data);
+    setPage(pageNumber);
+  } catch (error) {
+    console.error(error);
+    alert("Pagination Failed");
+  }
+};
 
   const searchCompanies = async () => {
     try {
@@ -42,6 +62,53 @@ function Companies() {
       alert("Search Failed");
     }
   };
+
+  const filterIndustry = async () => {
+  try {
+    if (!industryFilter.trim()) {
+      fetchCompanies();
+      return;
+    }
+
+    const res = await api.get(
+      `/companies/filter/industry?industry=${industryFilter}`
+    );
+
+    setCompanies(res.data);
+  } catch (error) {
+    console.error(error);
+    alert("Industry Filter Failed");
+  }
+};
+
+const filterCountry = async () => {
+  try {
+    if (!countryFilter.trim()) {
+      fetchCompanies();
+      return;
+    }
+
+    const res = await api.get(
+      `/companies/filter/country?country=${countryFilter}`
+    );
+    const sortCompanies = async (order) => {
+  try {
+    const res = await api.get(
+      `/companies/sort?order=${order}`
+    );
+
+    setCompanies(res.data);
+  } catch (error) {
+    console.error(error);
+    alert("Sort Failed");
+  }
+};
+    setCompanies(res.data);
+  } catch (error) {
+    console.error(error);
+    alert("Country Filter Failed");
+  }
+};
 
   const addCompany = async () => {
     try {
@@ -185,6 +252,68 @@ function Companies() {
         Show All
       </button>
 
+
+      <br />
+<br />
+
+<input
+  type="text"
+  placeholder="Filter by Industry"
+  value={industryFilter}
+  onChange={(e) => setIndustryFilter(e.target.value)}
+  style={{
+    padding: "8px",
+    width: "200px",
+    marginRight: "10px",
+  }}
+/>
+
+<button onClick={filterIndustry}>
+  Filter Industry
+</button>
+
+<input
+  type="text"
+  placeholder="Filter by Country"
+  value={countryFilter}
+  onChange={(e) => setCountryFilter(e.target.value)}
+  style={{
+    padding: "8px",
+    width: "200px",
+    marginLeft: "20px",
+    marginRight: "10px",
+  }}
+/>
+
+<button onClick={filterCountry}>
+  Filter Country
+</button>
+
+<hr />
+
+<h3>📊 Sort Companies</h3>
+
+<button
+  onClick={() => sortCompanies("asc")}
+  style={{
+    padding: "8px 15px",
+    marginRight: "10px",
+  }}
+>
+  A-Z
+</button>
+
+<button
+  onClick={() => sortCompanies("desc")}
+  style={{
+    padding: "8px 15px",
+  }}
+>
+  Z-A
+</button>
+
+<hr />
+
       <hr />
 
       <button
@@ -323,9 +452,9 @@ function Companies() {
         </thead>
 
         <tbody>
-          {companies.map((company) => (
+          {companies.map((company, index) => (
             <tr key={company.id}>
-              <td>{company.id}</td>
+              <td>{index + 1}</td>
               <td>{company.company_name}</td>
               <td>{company.industry}</td>
               <td>{company.country}</td>
@@ -361,6 +490,38 @@ function Companies() {
             </tr>
           ))}
         </tbody>
+        <br />
+
+<div
+  style={{
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "15px",
+    marginTop: "20px",
+  }}
+>
+  <button
+    onClick={() => fetchPaginatedCompanies(page - 1)}
+    disabled={page === 1}
+    style={{
+      padding: "8px 15px",
+    }}
+  >
+    Previous
+  </button>
+
+  <h3>Page {page}</h3>
+
+  <button
+    onClick={() => fetchPaginatedCompanies(page + 1)}
+    style={{
+      padding: "8px 15px",
+    }}
+  >
+    Next
+  </button>
+</div>
       </table>
     </div>
   );

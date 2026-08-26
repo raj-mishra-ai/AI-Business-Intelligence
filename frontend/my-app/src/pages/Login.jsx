@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import api from "../services/api";
+
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -8,6 +10,7 @@ function Login() {
   const loginUser = async () => {
     try {
       const formData = new URLSearchParams();
+
       formData.append("username", email);
       formData.append("password", password);
 
@@ -28,88 +31,52 @@ function Login() {
   };
 
   return (
-    <div
-      style={{
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        background: "#ffffff",
-      }}
-    >
-      <div
-        style={{
-          width: "400px",
-          padding: "30px",
-          background: "white",
-          borderRadius: "12px",
-          boxShadow: "0 0 20px rgba(61, 2, 2, 0.1)",
-        }}
-      >
-        <h1 
-        style={{
-             textAlign: "center",
-             fontSize:"32px",
-             marginbottom:"10px",
-            }}
-            >
+    <div className="login-container">
+
+      
+
+
+      
+
+      <div className="login-card">
+
+        <h1 className="logo">
           AI Business Intelligence
         </h1>
 
-        <p style={{ textAlign: "center" }}>
-          Login to continue
+        <p className="subtitle">
+          Smart Insights. Better Decisions.
         </p>
+
+        <h2 className="welcome">
+          Welcome Back 👋
+        </h2>
 
         <input
           type="email"
           placeholder="Enter Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          style={{
-            width: "100%",
-            padding: "10px",
-            marginTop: "10px",
-          }}
         />
-
-        <br />
-        <br />
 
         <input
           type="password"
           placeholder="Enter Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          style={{
-            width: "100%",
-            padding: "10px",
-          }}
         />
 
-        <br />
-        <br />
-
-        <button
-          onClick={loginUser}
-          style={{
-            width: "100%",
-            padding: "12px",
-            cursor: "pointer",
-          }}
-        >
+        <button onClick={loginUser}>
           Login
         </button>
 
-        <p
-          style={{
-            textAlign: "center",
-            marginTop: "15px",
-          }}
-        >
+        <p className="register-text">
           Don't have an account?
-          <a href="/register"> Register</a>
+          <Link to="/register"> Register</Link>
         </p>
+
       </div>
+
     </div>
   );
 }

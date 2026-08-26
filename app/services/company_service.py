@@ -23,15 +23,16 @@ def create_company(db: Session, company: CompanyCreate):
         raise CompanyAlreadyExistsException()
 
     new_company = Company(
-        company_name=company.company_name,
-        industry=company.industry,
-        country=company.country
+        company_name=company.company_name.strip(),
+        industry=company.industry.strip().title(),
+        country=company.country.strip().title()
     )
 
     db.add(new_company)
     db.commit()
     db.refresh(new_company)
 
+    return new_company
     return new_company
 
 
@@ -57,9 +58,9 @@ def update_company(
 ):
     db_company = get_company_by_id(db, company_id)
 
-    db_company.company_name = company.company_name
-    db_company.industry = company.industry
-    db_company.country = company.country
+    db_company.company_name = company.company_name.strip()
+    db_company.industry = company.industry.strip().title()
+    db_company.country = company.country.strip().title()
 
     db.commit()
     db.refresh(db_company)
