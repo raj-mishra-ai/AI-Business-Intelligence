@@ -91,7 +91,15 @@ const filterCountry = async () => {
     const res = await api.get(
       `/companies/filter/country?country=${countryFilter}`
     );
-    const sortCompanies = async (order) => {
+
+    setCompanies(res.data);
+  } catch (error) {
+    console.error(error);
+    alert("Country Filter Failed");
+  }
+};
+
+const sortCompanies = async (order) => {
   try {
     const res = await api.get(
       `/companies/sort?order=${order}`
@@ -103,12 +111,7 @@ const filterCountry = async () => {
     alert("Sort Failed");
   }
 };
-    setCompanies(res.data);
-  } catch (error) {
-    console.error(error);
-    alert("Country Filter Failed");
-  }
-};
+  
 
   const addCompany = async () => {
     try {
@@ -210,7 +213,7 @@ const filterCountry = async () => {
 
         <button
           onClick={() => {
-            localStorage.removeItem("access_token");
+            localStorage.removeItem("token");
             window.location.href = "/login";
           }}
         >
@@ -490,7 +493,7 @@ const filterCountry = async () => {
             </tr>
           ))}
         </tbody>
-        <br />
+       
 
 <div
   style={{
