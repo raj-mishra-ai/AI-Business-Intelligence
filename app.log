@@ -1091,3 +1091,8 @@ Traceback (most recent call last):
               ^^^^^^^^^^^^^^^^^
 AttributeError: module 'bcrypt' has no attribute '__about__'
 2026-08-29 15:50:12,735 - INFO - Response Status: 200
+2026-08-29 16:02:07,750 - INFO - Application Started Successfully
+2026-08-29 16:02:52,562 - INFO - Request: GET http://127.0.0.1:8000/docs
+2026-08-29 16:02:52,571 - INFO - Response Status: 200
+2026-08-29 16:02:52,716 - INFO - Request: GET http://127.0.0.1:8000/openapi.json
+2026-08-29 16:02:52,790 - INFO - Response Status: 200
