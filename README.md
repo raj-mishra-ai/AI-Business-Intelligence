@@ -91,6 +91,17 @@ npm run dev
 - Export Reports
 - AI-Powered Business Insights
 
+- ## Live Demo
+
+Frontend:
+https://YOUR-VERCEL-URL.vercel.app
+
+Backend API:
+https://ai-business-intelligence-api.onrender.com
+
+API Documentation:
+https://ai-business-intelligence-api.onrender.com/docs
+
 ## Author
 
 Raj Mishra
