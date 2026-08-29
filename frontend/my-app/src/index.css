@@ -8,29 +8,14 @@
 body{
   min-height:100vh;
   background:linear-gradient(
-    -45deg,
-    #0f172a,
-    #1e293b,
-    #2563eb,
-    #7c3aed
+    135deg,
+    #f8fafc,
+    #e2e8f0,
+    #dbeafe
   );
-  background-size:400% 400%;
-  animation:gradientMove 12s ease infinite;
 }
 
-@keyframes gradientMove{
-  0%{
-    background-position:0% 50%;
-  }
 
-  50%{
-    background-position:100% 50%;
-  }
-
-  100%{
-    background-position:0% 50%;
-  }
-}
 
 .login-container{
   min-height:100vh;

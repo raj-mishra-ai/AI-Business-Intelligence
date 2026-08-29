@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
-
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer
+} from "recharts";
 function Companies() {
   const [companies, setCompanies] = useState([]);
 
@@ -69,6 +77,29 @@ const limit = 5;
       fetchCompanies();
       return;
     }
+    const totalIndustries = new Set(
+  companies.map((company) => company.industry)
+).size;
+
+const totalCountries = new Set(
+  companies.map((company) => company.country)
+).size;
+    const chartData = [];
+
+companies.forEach((company) => {
+  const existing = chartData.find(
+    (item) => item.industry === company.industry
+  );
+
+  if (existing) {
+    existing.count += 1;
+  } else {
+    chartData.push({
+      industry: company.industry,
+      count: 1,
+    });
+  }
+});
 
     const res = await api.get(
       `/companies/filter/industry?industry=${industryFilter}`
@@ -111,7 +142,6 @@ const sortCompanies = async (order) => {
     alert("Sort Failed");
   }
 };
-  
 
   const addCompany = async () => {
     try {
@@ -186,10 +216,28 @@ const sortCompanies = async (order) => {
       "http://127.0.0.1:8000/companies/export/excel",
       "_blank"
     );
-  };
+  };const chartData = [];
+
+companies.forEach((company) => {
+  const existing = chartData.find(
+    (item) => item.industry === company.industry
+  );
+
+  if (existing) {
+    existing.count += 1;
+  } else {
+    chartData.push({
+      industry: company.industry,
+      count: 1,
+    });
+  }
+});
 
   return (
     <div style={{ padding: "20px" }}>
+      
+
+<hr />
       <h1>🏢 Companies Management</h1>
 
       <div
@@ -222,6 +270,30 @@ const sortCompanies = async (order) => {
       </div>
 
       <h3>Total Companies: {companies.length}</h3>
+      <div
+  style={{
+    display: "flex",
+    gap: "20px",
+    marginTop: "20px",
+    marginBottom: "20px",
+    flexWrap: "wrap",
+  }}
+>
+  <div
+    style={{
+      background: "#3b82f6",
+      color: "white",
+      padding: "20px",
+      borderRadius: "10px",
+      minWidth: "200px",
+    }}
+  >
+    <h3>Total Companies</h3>
+    <h2>{companies.length}</h2>
+  </div>
+
+  
+</div>
 
       <hr />
 
@@ -322,7 +394,7 @@ const sortCompanies = async (order) => {
       <button
         onClick={exportCSV}
         style={{
-          backgroundColor: "#36A2EB",
+          backgroundColor: "#405462",
           color: "white",
           padding: "10px",
           border: "none",
@@ -350,7 +422,7 @@ const sortCompanies = async (order) => {
 
       <div
         style={{
-          border: "1px solid #ddd",
+          border: "1px solid #373274",
           padding: "20px",
           borderRadius: "10px",
           marginBottom: "20px",
@@ -442,7 +514,7 @@ const sortCompanies = async (order) => {
         <thead>
           <tr
             style={{
-              backgroundColor: "#36A2EB",
+              backgroundColor: "#0091ff",
               color: "white",
             }}
           >
@@ -526,6 +598,21 @@ const sortCompanies = async (order) => {
   </button>
 </div>
       </table>
+      <hr />
+
+<h2>Companies By Industry</h2>
+
+<div style={{ width: "100%", height: 300 }}>
+  <ResponsiveContainer>
+    <BarChart data={chartData}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="industry" />
+      <YAxis />
+      <Tooltip />
+      <Bar dataKey="count" fill="#3b82f6" />
+    </BarChart>
+  </ResponsiveContainer>
+</div>
     </div>
   );
 }
